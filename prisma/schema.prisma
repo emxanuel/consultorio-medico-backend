@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Person {
+  id                Int           @id @default(autoincrement())
+  first_name        String        @db.VarChar(100)
+  last_name         String        @db.VarChar(100)
+  age               Int
+  gender            Gender
+  marital_status    MaritalStatus
+  birth_date        String        @db.VarChar(150)
+  birth_place       String        @db.VarChar(150)
+  nationality       String        @db.VarChar(100)
+  religion          String?       @db.VarChar(100)
+  occupation        String?       @db.VarChar(100)
+  document_id       String        @db.VarChar(50)
+  address           String        @db.VarChar(255)
+  residential_phone String?       @db.VarChar(20)
+  cellphone         String        @db.VarChar(20)
+
+  emergencyContacts EmergencyContact[]
+  insurances        Insurance[]
+  visits            Visits[]
+}
+
+enum Gender {
+  male
+  female
+}
+
+enum MaritalStatus {
+  single
+  married
+  divorced
+  widowed
+  minor
+}
+
+model EmergencyContact {
+  id                Int     @id @default(autoincrement())
+  person_id         Int
+  name              String  @db.VarChar(100)
+  residential_phone String? @db.VarChar(20)
+  cellphone         String  @db.VarChar(20)
+  relationship      String  @db.VarChar(100)
+  address           String  @db.VarChar(255)
+
+  person Person @relation(fields: [person_id], references: [id], onDelete: Cascade)
+
+  @@map("emergency_contact")
+}
+
+model Insurance {
+  id                               Int     @id @default(autoincrement())
+  person_id                        Int
+  has_assurance                    Boolean
+  ars_name                         String? @db.VarChar(100)
+  ars_cardholder                   String? @db.VarChar(100)
+  ars_primary_insured              String? @db.VarChar(100)
+  ars_plan                         String? @db.VarChar(100)
+  ars_contract_number              String? @db.VarChar(50)
+  ars_primary_insured_relationship String? @db.VarChar(50)
+
+  person Person @relation(fields: [person_id], references: [id], onDelete: Cascade)
+}
+
+model Visits {
+  id         Int     @id @default(autoincrement())
+  patient_id Int
+  visit_date String  @db.VarChar(50)
+  reason     String  @db.VarChar(255)
+  diagnosis  String? @db.VarChar(255)
+  treatment  String? @db.VarChar(255)
+
+  person Person @relation(fields: [patient_id], references: [id], onDelete: Cascade)
+}

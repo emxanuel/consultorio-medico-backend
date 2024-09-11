@@ -1,11 +1,14 @@
 import e from "express";
 import dotenv from "dotenv";
+import router from "@/routes";
 
 const app = e();
 dotenv.config();
 app.use(e.json());
 
-app.get("/", (req, res) => {
+app.use("/api/v1", router);
+
+app.get("/api", (req, res) => {
   res.json("Hello World!");
 });
 
