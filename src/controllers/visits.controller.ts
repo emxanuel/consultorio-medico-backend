@@ -15,8 +15,6 @@ export const getAllVisits = async (req: Request, res: Response) => {
     ? (dateRange as string).split(",")
     : [null, null];
 
-    console.log(startDate, endDate)
-
   if (startDate && endDate) {
     visits = visits.filter((visit) => {
       const visitDate = dayjs(visit.visit_date);
