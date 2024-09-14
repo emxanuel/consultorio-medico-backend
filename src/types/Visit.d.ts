@@ -5,4 +5,5 @@ export type Visit = {
   reason: string;
   diagnosis?: string;
   treatment?: string;
+  status: number
 };

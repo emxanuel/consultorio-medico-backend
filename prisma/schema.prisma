@@ -83,6 +83,7 @@ model Visits {
   reason     String  @db.VarChar(255)
   diagnosis  String? @db.VarChar(255)
   treatment  String? @db.VarChar(255)
+  status     Int     @default(0)
 
   person Person @relation(fields: [patient_id], references: [id], onDelete: Cascade)
 }

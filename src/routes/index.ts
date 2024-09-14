@@ -10,7 +10,7 @@ router.get("/", (_, res) => {
   res.json("Hello World!");
 });
 
-router.use("/person", personRouter)
+router.use("/patients", personRouter)
 router.use("/visits", visitsRouter)
 router.use("/emergencyContact", emergencyContactRouter)
 router.use("/insurance", insuranceRouter)

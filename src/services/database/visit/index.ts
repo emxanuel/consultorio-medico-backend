@@ -28,3 +28,13 @@ export const getVisitsByPatientId = async (id: number) => {
     },
   });
 };
+
+export const answerToVisit = async (id: number, diagnosis: string, status: number) => {
+  return await prisma.visits.update({
+    where: { id },
+    data: {
+      diagnosis,
+      status,
+    },
+  });
+}

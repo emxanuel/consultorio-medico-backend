@@ -9,17 +9,26 @@ export const getPerson = async (req: Request, res: Response) => {
 };
 
 export const addPerson = async (req: Request, res: Response) => {
-    const { personInfo, emergencyContactInfo, visitInfo, insuranceInfo } = req.body;
+    const { patientInfo, emergencyContactInfo, visitInfo, insuranceInfo } = req.body;
 
-    const p: Person = personInfo;
+    const p: Person = patientInfo;
     const i: Insurance = insuranceInfo;
     const e: EmergencyContact = emergencyContactInfo;
     const v: Visit = visitInfo;
-    console.log(p, i, e, v)
 
     // console.log(emergencyContactInfo, visitInfo, insuranceInfo);
 
-    const person = await createPerson(p, i, e, v)
-
-    res.json(person)
+    try{
+        if(!p || !i || !e || !v){
+            throw new Error("Missing required fields")
+        }
+        if (!v.reason){
+            throw new Error("Missing required fields")
+        }
+        const person = await createPerson(p, i, e, v)
+        res.json(person)
+    }
+    catch(error){
+        res.status(400).json(error)
+    }
 };
