@@ -7,8 +7,8 @@ export const getPersonById = async (id: number) => {
   return await prisma.person.findUnique({
     where: { id },
     include: {
-      emergencyContacts: true,
-      insurances: true,
+      emergency_contact: true,
+      insurance: true,
     },
   });
 };
@@ -22,10 +22,10 @@ export const createPerson = async (
   return await prisma.person.create({
     data: {
       ...personInfo,
-      insurances: {
+      insurance: {
         create: insuranceInfo,
       },
-      emergencyContacts: {
+      emergency_contact: {
         create: emergencyContactInfo,
       },
       visits: {

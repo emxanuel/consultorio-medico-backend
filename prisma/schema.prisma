@@ -30,9 +30,11 @@ model Person {
   residential_phone String?       @db.VarChar(20)
   cellphone         String        @db.VarChar(20)
 
-  emergencyContacts EmergencyContact[]
-  insurances        Insurance[]
+  emergency_contact EmergencyContact[]
+  insurance         Insurance[]
   visits            Visits[]
+
+  @@map("person")
 }
 
 enum Gender {
@@ -74,6 +76,8 @@ model Insurance {
   ars_primary_insured_relationship String? @db.VarChar(50)
 
   person Person @relation(fields: [person_id], references: [id], onDelete: Cascade)
+
+  @@map("insurance")
 }
 
 model Visits {
@@ -86,4 +90,6 @@ model Visits {
   status     Int     @default(0)
 
   person Person @relation(fields: [patient_id], references: [id], onDelete: Cascade)
+
+  @@map("visits")
 }
