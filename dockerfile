@@ -2,9 +2,11 @@ FROM node:19-bullseye
 
 WORKDIR /app
 
-COPY . .
+COPY package.json .
 
 RUN npm install
+
+COPY . .
 
 RUN npm install -g ts-node
 
