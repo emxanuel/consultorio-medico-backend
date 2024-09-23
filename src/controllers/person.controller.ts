@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { createPerson, getPersonById } from "@/services/database/person";
-import { EmergencyContact, Insurance, Person, Visit } from "@/types";
+import { createPerson, getPersonById } from "../services/database/person";
+import { EmergencyContact, Insurance, Person, Visit } from "../types";
 
 export const getPerson = async (req: Request, res: Response) => {
     const { id } = req.params;

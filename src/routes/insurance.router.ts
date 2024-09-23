@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getInsurancePerPerson } from "@/controllers";
+import { getInsurancePerPerson } from "../controllers";
 
 const insuranceRouter = Router();
 

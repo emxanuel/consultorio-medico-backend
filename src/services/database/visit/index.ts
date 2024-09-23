@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";  
-import { Insurance, Person, EmergencyContact, Visit } from "@/types";
+import { Insurance, Person, EmergencyContact, Visit } from "../../../types";
 
 const prisma = new PrismaClient();
 

@@ -4,7 +4,7 @@ import {
   getVisitsByPatientId,
   getVisitById,
   answerToVisit,
-} from "@/services/database/visit";
+} from "../services/database/visit";
 import dayjs from "dayjs";
 
 export const getAllVisits = async (req: Request, res: Response) => {

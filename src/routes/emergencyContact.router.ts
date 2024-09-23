@@ -1,4 +1,4 @@
-import { getEmergencyContactPerPerson } from "@/controllers";
+import { getEmergencyContactPerPerson } from "../controllers";
 
 import { Router } from "express";
 
