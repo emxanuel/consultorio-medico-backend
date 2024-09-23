@@ -4,7 +4,7 @@
       {
         "src": "src/index.ts",
         "use": "@vercel/node",
-        "buildCommand": "npx prisma generate"
+        "command": "npx prisma generate"
       }
     ],
     "routes": [
