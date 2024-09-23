@@ -11,8 +11,5 @@
         "src": "/(.*)",
         "dest": "src/index.ts"
       }
-    ],
-    "scripts": {
-      "build": "npx prisma generate"
-    }
+    ]
   }
