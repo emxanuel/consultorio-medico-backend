@@ -19,14 +19,14 @@ model Person {
   last_name         String        @db.VarChar(100)
   age               Int
   gender            Gender
-  marital_status    MaritalStatus
+  marital_status    MaritalStatus?
   birth_date        String        @db.VarChar(150)
-  birth_place       String        @db.VarChar(150)
-  nationality       String        @db.VarChar(100)
+  birth_place       String?        @db.VarChar(150)
+  nationality       String?        @db.VarChar(100)
   religion          String?       @db.VarChar(100)
   occupation        String?       @db.VarChar(100)
   document_id       String        @db.VarChar(50)
-  address           String        @db.VarChar(255)
+  address           String?        @db.VarChar(255)
   residential_phone String?       @db.VarChar(20)
   cellphone         String        @db.VarChar(20)
 
@@ -57,7 +57,7 @@ model EmergencyContact {
   residential_phone String? @db.VarChar(20)
   cellphone         String  @db.VarChar(20)
   relationship      String  @db.VarChar(100)
-  address           String  @db.VarChar(255)
+  address           String?  @db.VarChar(255)
 
   person Person @relation(fields: [person_id], references: [id], onDelete: Cascade)
 
