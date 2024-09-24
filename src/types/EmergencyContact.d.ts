@@ -7,6 +7,6 @@ export type EmergencyContact = {
     residential_phone?: string;
     cellphone: string;
     relationship: string;
-    address: string;
+    address?: string;
   };
   
