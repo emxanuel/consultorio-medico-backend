@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,27 +8,103 @@ datasource db {
 }
 
 model Person {
-  id                Int           @id @default(autoincrement())
-  first_name        String        @db.VarChar(100)
-  last_name         String        @db.VarChar(100)
+  id                Int                 @id @default(autoincrement())
+  first_name        String              @db.VarChar(100)
+  last_name         String              @db.VarChar(100)
   age               Int
   gender            Gender
   marital_status    MaritalStatus?
-  birth_date        String        @db.VarChar(150)
-  birth_place       String?        @db.VarChar(150)
-  nationality       String?        @db.VarChar(100)
-  religion          String?       @db.VarChar(100)
-  occupation        String?       @db.VarChar(100)
-  document_id       String        @db.VarChar(50)
-  address           String?        @db.VarChar(255)
-  residential_phone String?       @db.VarChar(20)
-  cellphone         String        @db.VarChar(20)
-
+  birth_date        String              @db.VarChar(150)
+  birth_place       String?             @db.VarChar(150)
+  nationality       String?             @db.VarChar(100)
+  religion          String?             @db.VarChar(100)
+  occupation        String?             @db.VarChar(100)
+  document_id       String              @db.VarChar(50)
+  address           String?             @db.VarChar(255)
+  residential_phone String?             @db.VarChar(20)
+  cellphone         String              @db.VarChar(20)
   emergency_contact EmergencyContact[]
+  enterprise_admin  enterprise_admin[]
+  enterprise_person enterprise_person[]
   insurance         Insurance[]
   visits            Visits[]
 
   @@map("person")
+}
+
+model EmergencyContact {
+  id                Int     @id @default(autoincrement())
+  person_id         Int?
+  name              String  @db.VarChar(100)
+  residential_phone String? @db.VarChar(20)
+  cellphone         String  @db.VarChar(20)
+  relationship      String  @db.VarChar(100)
+  address           String? @db.VarChar(255)
+  person            Person? @relation(fields: [person_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "emergency_contact_ibfk_1")
+
+  @@index([person_id], map: "person_id")
+  @@map("emergency_contact")
+}
+
+model Insurance {
+  id                               Int     @id @default(autoincrement())
+  person_id                        Int?
+  has_assurance                    Boolean
+  ars_name                         String? @db.VarChar(100)
+  ars_cardholder                   String? @db.VarChar(100)
+  ars_primary_insured              String? @db.VarChar(100)
+  ars_plan                         String? @db.VarChar(100)
+  ars_contract_number              String? @db.VarChar(50)
+  ars_primary_insured_relationship String? @db.VarChar(50)
+  person                           Person? @relation(fields: [person_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "insurance_ibfk_1")
+
+  @@index([person_id], map: "person_id")
+  @@map("insurance")
+}
+
+model Visits {
+  id         Int     @id @default(autoincrement())
+  patient_id Int
+  visit_date String? @db.VarChar(50)
+  reason     String  @db.VarChar(255)
+  diagnosis  String? @db.VarChar(255)
+  treatment  String? @db.VarChar(255)
+  status     Int     @default(0)
+  person     Person  @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "visits_ibfk_1")
+
+  @@index([patient_id], map: "patient_id")
+  @@map("visits")
+}
+
+model enterprise_admin {
+  id               Int          @id @default(autoincrement())
+  enterprise_id    Int?
+  admin_id         Int?
+  enterprise_owner Int?
+  enterprises      enterprises? @relation(fields: [enterprise_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "enterprise_admin_ibfk_1")
+  person           Person?      @relation(fields: [admin_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "enterprise_admin_ibfk_2")
+
+  @@index([admin_id], map: "admin_id")
+  @@index([enterprise_id], map: "enterprise_id")
+}
+
+model enterprise_person {
+  id            Int          @id @default(autoincrement())
+  enterprise_id Int?
+  person_id     Int?
+  enterprises   enterprises? @relation(fields: [enterprise_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "enterprise_person_ibfk_1")
+  person        Person?      @relation(fields: [person_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "enterprise_person_ibfk_2")
+
+  @@index([enterprise_id], map: "enterprise_id")
+  @@index([person_id], map: "person_id")
+}
+
+model enterprises {
+  id                Int                 @id @default(autoincrement())
+  name              String?             @db.VarChar(255)
+  created_at        String?             @db.VarChar(40)
+  enterprise_admin  enterprise_admin[]
+  enterprise_person enterprise_person[]
 }
 
 enum Gender {
@@ -48,48 +118,4 @@ enum MaritalStatus {
   divorced
   widowed
   minor
-}
-
-model EmergencyContact {
-  id                Int     @id @default(autoincrement())
-  person_id         Int
-  name              String  @db.VarChar(100)
-  residential_phone String? @db.VarChar(20)
-  cellphone         String  @db.VarChar(20)
-  relationship      String  @db.VarChar(100)
-  address           String?  @db.VarChar(255)
-
-  person Person @relation(fields: [person_id], references: [id], onDelete: Cascade)
-
-  @@map("emergency_contact")
-}
-
-model Insurance {
-  id                               Int     @id @default(autoincrement())
-  person_id                        Int
-  has_assurance                    Boolean
-  ars_name                         String? @db.VarChar(100)
-  ars_cardholder                   String? @db.VarChar(100)
-  ars_primary_insured              String? @db.VarChar(100)
-  ars_plan                         String? @db.VarChar(100)
-  ars_contract_number              String? @db.VarChar(50)
-  ars_primary_insured_relationship String? @db.VarChar(50)
-
-  person Person @relation(fields: [person_id], references: [id], onDelete: Cascade)
-
-  @@map("insurance")
-}
-
-model Visits {
-  id         Int     @id @default(autoincrement())
-  patient_id Int
-  visit_date String  @db.VarChar(50)
-  reason     String  @db.VarChar(255)
-  diagnosis  String? @db.VarChar(255)
-  treatment  String? @db.VarChar(255)
-  status     Int     @default(0)
-
-  person Person @relation(fields: [patient_id], references: [id], onDelete: Cascade)
-
-  @@map("visits")
 }
