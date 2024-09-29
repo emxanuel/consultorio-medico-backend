@@ -5,8 +5,8 @@ import cors from "cors";
 
 const app = e();
 dotenv.config();
-app.use(e.json());
 app.use(e.urlencoded({ extended: true }));
+app.use(e.json());
 app.use(cors());
 
 app.use("/api/v1", router);

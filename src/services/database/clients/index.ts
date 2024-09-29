@@ -4,7 +4,7 @@ import { Insurance, Person, EmergencyContact, Visit } from "../../../types";
 const prisma = new PrismaClient();
 
 export const getPersonById = async (id: number) => {
-  return await prisma.person.findUnique({
+  return await prisma.clients.findUnique({
     where: { id },
     include: {
       emergency_contact: true,
@@ -18,28 +18,10 @@ export const createPerson = async (
   insuranceInfo: Insurance,
   emergencyContactInfo: EmergencyContact,
   visitInfo: Visit,
-  enterpriseId: number,
-  isAdmin: boolean
+  accountId: number,
 ) => {
 
-  if (isAdmin){
-    return await prisma.person.create({
-      data: {
-        ...personInfo,
-        insurance: {
-          create: insuranceInfo,
-        },
-        enterprise_admin: {
-          create: {
-            enterprise_id: enterpriseId,
-            enterprise_owner: 1
-          }
-        }
-      },
-    });
-  }
-
-  return await prisma.person.create({
+  return await prisma.clients.create({
     data: {
       ...personInfo,
       insurance: {
@@ -51,9 +33,9 @@ export const createPerson = async (
       visits: {
         create: visitInfo
       },
-      enterprise_person: {
+      account_client: {
         create: {
-          enterprise_id: enterpriseId,
+          account_id: accountId,
         }
       }
     },

@@ -7,56 +7,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Person {
-  id                Int                 @id @default(autoincrement())
-  first_name        String              @db.VarChar(100)
-  last_name         String              @db.VarChar(100)
-  age               Int
-  gender            Gender
-  marital_status    MaritalStatus?
-  birth_date        String              @db.VarChar(150)
-  birth_place       String?             @db.VarChar(150)
-  nationality       String?             @db.VarChar(100)
-  religion          String?             @db.VarChar(100)
-  occupation        String?             @db.VarChar(100)
-  document_id       String              @db.VarChar(50)
-  address           String?             @db.VarChar(255)
-  residential_phone String?             @db.VarChar(20)
-  cellphone         String              @db.VarChar(20)
-  emergency_contact EmergencyContact[]
-  enterprise_admin  enterprise_admin[]
-  enterprise_person enterprise_person[]
-  insurance         Insurance[]
-  visits            Visits[]
-
-  @@map("person")
-}
-
 model EmergencyContact {
-  id                Int     @id @default(autoincrement())
+  id                Int      @id @default(autoincrement())
   person_id         Int?
-  name              String  @db.VarChar(100)
-  residential_phone String? @db.VarChar(20)
-  cellphone         String  @db.VarChar(20)
-  relationship      String  @db.VarChar(100)
-  address           String? @db.VarChar(255)
-  person            Person? @relation(fields: [person_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "emergency_contact_ibfk_1")
+  name              String   @db.VarChar(100)
+  residential_phone String?  @db.VarChar(20)
+  cellphone         String   @db.VarChar(20)
+  relationship      String   @db.VarChar(100)
+  address           String?  @db.VarChar(255)
+  person            clients? @relation(fields: [person_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "emergency_contact_ibfk_1")
 
   @@index([person_id], map: "person_id")
   @@map("emergency_contact")
 }
 
 model Insurance {
-  id                               Int     @id @default(autoincrement())
+  id                               Int      @id @default(autoincrement())
   person_id                        Int?
   has_assurance                    Boolean
-  ars_name                         String? @db.VarChar(100)
-  ars_cardholder                   String? @db.VarChar(100)
-  ars_primary_insured              String? @db.VarChar(100)
-  ars_plan                         String? @db.VarChar(100)
-  ars_contract_number              String? @db.VarChar(50)
-  ars_primary_insured_relationship String? @db.VarChar(50)
-  person                           Person? @relation(fields: [person_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "insurance_ibfk_1")
+  ars_name                         String?  @db.VarChar(100)
+  ars_cardholder                   String?  @db.VarChar(100)
+  ars_primary_insured              String?  @db.VarChar(100)
+  ars_plan                         String?  @db.VarChar(100)
+  ars_contract_number              String?  @db.VarChar(50)
+  ars_primary_insured_relationship String?  @db.VarChar(50)
+  person                           clients? @relation(fields: [person_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "insurance_ibfk_1")
 
   @@index([person_id], map: "person_id")
   @@map("insurance")
@@ -70,49 +45,87 @@ model Visits {
   diagnosis  String? @db.VarChar(255)
   treatment  String? @db.VarChar(255)
   status     Int     @default(0)
-  person     Person  @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "visits_ibfk_1")
+  person     clients @relation(fields: [patient_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "visits_ibfk_1")
 
   @@index([patient_id], map: "patient_id")
   @@map("visits")
 }
 
-model enterprise_admin {
-  id               Int          @id @default(autoincrement())
-  enterprise_id    Int?
-  admin_id         Int?
-  enterprise_owner Int?
-  enterprises      enterprises? @relation(fields: [enterprise_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "enterprise_admin_ibfk_1")
-  person           Person?      @relation(fields: [admin_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "enterprise_admin_ibfk_2")
+model account_admin {
+  id            Int       @id @default(autoincrement())
+  account_id    Int?
+  admin_id      Int?
+  account_owner Int?
+  accounts      accounts? @relation(fields: [account_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "account_admin_ibfk_1")
+  clients       users?    @relation(fields: [admin_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "account_admin_ibfk_2")
 
-  @@index([admin_id], map: "admin_id")
-  @@index([enterprise_id], map: "enterprise_id")
+  @@index([account_id], map: "account_admin_ibfk_1")
+  @@index([admin_id], map: "account_admin_ibfk_2_idx")
 }
 
-model enterprise_person {
-  id            Int          @id @default(autoincrement())
-  enterprise_id Int?
-  person_id     Int?
-  enterprises   enterprises? @relation(fields: [enterprise_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "enterprise_person_ibfk_1")
-  person        Person?      @relation(fields: [person_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "enterprise_person_ibfk_2")
+model account_client {
+  id         Int       @id @default(autoincrement())
+  account_id Int?
+  client_id  Int?
+  accounts   accounts? @relation(fields: [account_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "account_client_ibfk_1")
+  clients    clients?  @relation(fields: [client_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "account_client_ibfk_2")
 
-  @@index([enterprise_id], map: "enterprise_id")
-  @@index([person_id], map: "person_id")
+  @@index([account_id], map: "account_person_ibfk_1")
+  @@index([client_id], map: "account_client_ibfk_2")
 }
 
-model enterprises {
-  id                Int                 @id @default(autoincrement())
-  name              String?             @db.VarChar(255)
-  created_at        String?             @db.VarChar(40)
-  enterprise_admin  enterprise_admin[]
-  enterprise_person enterprise_person[]
+model accounts {
+  id             Int              @id @default(autoincrement())
+  name           String?          @db.VarChar(255)
+  created_at     String?          @db.VarChar(40)
+  admin_id       Int?
+  account_admin  account_admin[]
+  account_client account_client[]
+  users          users?           @relation(fields: [admin_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "accounts_ibfk_1")
+
+  @@index([admin_id], map: "accounts_ibfk_1_idx")
 }
 
-enum Gender {
+model clients {
+  id                Int                     @id @default(autoincrement())
+  first_name        String                  @db.VarChar(100)
+  last_name         String                  @db.VarChar(100)
+  age               Int
+  gender            clients_gender
+  marital_status    clients_marital_status?
+  birth_date        String                  @db.VarChar(150)
+  birth_place       String?                 @db.VarChar(150)
+  nationality       String?                 @db.VarChar(100)
+  religion          String?                 @db.VarChar(100)
+  occupation        String?                 @db.VarChar(100)
+  document_id       String                  @db.VarChar(50)
+  address           String?                 @db.VarChar(255)
+  residential_phone String?                 @db.VarChar(20)
+  cellphone         String                  @db.VarChar(20)
+  created_at        String?                 @db.VarChar(45)
+  client_number     String?                 @unique(map: "client_number_UNIQUE") @db.VarChar(10)
+  account_client    account_client[]
+  emergency_contact EmergencyContact[]
+  insurance         Insurance[]
+  visits            Visits[]
+}
+
+model users {
+  id            Int             @id @default(autoincrement())
+  first_name    String?         @db.VarChar(50)
+  last_name     String?         @db.VarChar(50)
+  email         String?         @db.VarChar(255)
+  created_at    String?         @db.VarChar(40)
+  account_admin account_admin[]
+  accounts      accounts[]
+}
+
+enum clients_gender {
   male
   female
 }
 
-enum MaritalStatus {
+enum clients_marital_status {
   single
   married
   divorced

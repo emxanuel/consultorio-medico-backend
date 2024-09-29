@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createPerson, getPersonById } from "../services/database/person";
+import { createPerson, getPersonById } from "../services/database/clients";
 import { EmergencyContact, Insurance, Person, Visit } from "../types";
 
 export const getPerson = async (req: Request, res: Response) => {
@@ -16,8 +16,6 @@ export const addPerson = async (req: Request, res: Response) => {
     const e: EmergencyContact = emergencyContactInfo;
     const v: Visit = visitInfo;
 
-    // console.log(emergencyContactInfo, visitInfo, insuranceInfo);
-
     try{
         if(!p || !i || !e || !v){
             throw new Error("Missing required fields")
@@ -25,7 +23,7 @@ export const addPerson = async (req: Request, res: Response) => {
         if (!v.reason){
             throw new Error("Missing required fields")
         }
-        const person = await createPerson(p, i, e, v, enterpriseId, isAdmin)
+        const person = await createPerson(p, i, e, v, enterpriseId)
         res.json(person)
     }
     catch(error){
