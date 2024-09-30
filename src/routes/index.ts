@@ -1,9 +1,10 @@
 import { Router } from "express";
 import personRouter from "./person.routes";
-import visitsRouter from "./visits.router";
+import visitsRouter from "./visits.routes";
 import emergencyContactRouter from "./emergencyContact.routes";
 import insuranceRouter from "./insurance.routes";
 import usersRouter from "./users.routes";
+import accountsRouter from "./accounts.routes";
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use("/visits", visitsRouter)
 router.use("/emergencyContact", emergencyContactRouter)
 router.use("/insurance", insuranceRouter)
 router.use("/users", usersRouter)
+router.use("/accounts", accountsRouter)
 
 export default router;
