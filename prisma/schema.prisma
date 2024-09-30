@@ -103,7 +103,6 @@ model clients {
   address           String?                 @db.VarChar(255)
   residential_phone String?                 @db.VarChar(20)
   cellphone         String                  @db.VarChar(20)
-  created_at        String?                 @db.VarChar(45)
   client_number     String?                 @unique(map: "client_number_UNIQUE") @db.VarChar(10)
   account_client    account_client[]
   emergency_contact EmergencyContact[]

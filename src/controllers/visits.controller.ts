@@ -8,8 +8,8 @@ import {
 import dayjs from "dayjs";
 
 export const getAllVisits = async (req: Request, res: Response) => {
-  let visits = await getVisits();
-  const { dateRange, processed, pendient, canceled, name } = req.query;
+  const { dateRange, processed, pendient, canceled, name, accountKey } = req.query;
+  let visits = await getVisits(accountKey as string);
 
   const [startDate, endDate] = dateRange
     ? (dateRange as string).split(",")

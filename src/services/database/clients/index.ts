@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Insurance, Person, EmergencyContact, Visit } from "../../../types";
+import { getAccountByKey } from "../accounts";
 
 const prisma = new PrismaClient();
 
@@ -18,8 +19,21 @@ export const createPerson = async (
   insuranceInfo: Insurance,
   emergencyContactInfo: EmergencyContact,
   visitInfo: Visit,
-  accountId: number,
+  accountKey: string,
 ) => {
+
+  const account = await prisma.accounts.findFirst({
+    where: {
+      account_key: accountKey,
+    },
+    select: {
+      id: true
+    }
+  })
+
+  if (!account) {
+    throw new Error("Account not found");
+  }
 
   return await prisma.clients.create({
     data: {
@@ -35,7 +49,7 @@ export const createPerson = async (
       },
       account_client: {
         create: {
-          account_id: accountId,
+          account_id: account.id,
         }
       }
     },

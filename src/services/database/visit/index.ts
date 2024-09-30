@@ -3,15 +3,44 @@ import { Insurance, Person, EmergencyContact, Visit } from "../../../types";
 
 const prisma = new PrismaClient();
 
-export const getVisits = async () => {
-  return await prisma.visits.findMany({
-    include: {
-      person: true,
-    },
-  });
+export const getVisits = async (accountKey: string) => {
+
+  try {
+    if (!accountKey) return [];
+
+    const account = await prisma.accounts.findFirst({
+      where: {
+        account_key: accountKey,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!account) return [];
+
+    const visits = await prisma.visits.findMany({
+      include: {
+        person: {
+          include: {
+            account_client: true
+          },
+        },
+      }
+    });
+
+    const result = visits.filter((visit) => {
+      return visit.person.account_client[0].account_id === account.id;
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching visits:", error);
+    throw error;
+  }
 }
 
-export const getVisitById = async (id: number) => {
+export const getVisitById = async (id: number, accountKey?: string) => {
   return await prisma.visits.findUnique({
     where: { id },
     include: {
