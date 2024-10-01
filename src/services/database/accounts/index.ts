@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { verifyUser } from "../users";
 
 const prisma = new PrismaClient();
 
@@ -33,7 +32,10 @@ export const getAccountByKey = async (key: string) => {
 }
 
 export const getUserAccounts = async (email: string) => {
-    const user = await verifyUser(email)
+    const user = await prisma.users.findFirst({
+        where: { email }
+    });
+    console.log(email)
     return await prisma.accounts.findMany({
         where: {
             admin_id: user?.id
