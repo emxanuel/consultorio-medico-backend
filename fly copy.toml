@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for backend-autumn-leaf-7356 on 2024-10-01T19:38:42-04:00
+# fly.toml app configuration file generated for backend-dark-shadow-7006 on 2024-09-24T11:52:54-04:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'backend-autumn-leaf-7356'
+app = 'backend-dark-shadow-7006'
 primary_region = 'ord'
 
 [build]

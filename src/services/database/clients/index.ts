@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../../../prisma";
 import { Insurance, Person, EmergencyContact, Visit } from "../../../types";
 import { getAccountByKey } from "../accounts";
-
-const prisma = new PrismaClient();
 
 export const getPersonById = async (id: number) => {
   return await prisma.clients.findUnique({

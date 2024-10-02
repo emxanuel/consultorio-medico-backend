@@ -25,6 +25,6 @@ export const verifyAccountInUser = async (req: Request, res: Response) => {
         const user = await verifyUser(email as string)
         res.json(user !== null)
     } catch (error) {
-        res.status(400).json({error})
+        res.json({})
     }
 }

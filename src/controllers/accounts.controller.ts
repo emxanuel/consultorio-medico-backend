@@ -10,8 +10,8 @@ export const getAccount = async (req: Request, res: Response) => {
         }
         const account = await getAccountByKey(key)
         res.json(account)
-    } catch (error) {
-        res.status(400).json({error})
+    } catch {
+        res.json({})
     }
 }
 
@@ -24,7 +24,7 @@ export const getAccountsByUser = async (req: Request, res: Response) => {
         }
         const accounts = await getUserAccounts(email)
         res.json(accounts)
-    } catch (error) {
-        res.status(400).json({error})
+    } catch {
+        res.json([])
     }
 }

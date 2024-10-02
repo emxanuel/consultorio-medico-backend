@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "../../../prisma";
 
 export const getInsuranceByPersonId = async (id: number) => {
   return await prisma.insurance.findFirst({

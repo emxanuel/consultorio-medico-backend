@@ -1,7 +1,4 @@
-import { PrismaClient } from "@prisma/client";  
-import { Insurance, Person, EmergencyContact, Visit } from "../../../types";
-
-const prisma = new PrismaClient();
+import prisma from "../../../prisma";
 
 export const getVisits = async (accountKey: string) => {
 
