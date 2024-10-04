@@ -33,7 +33,6 @@ export const getUserAccounts = async (email: string) => {
     const user = await prisma.users.findFirst({
         where: { email }
     });
-    console.log(email)
     return await prisma.accounts.findMany({
         where: {
             admin_id: user?.id
