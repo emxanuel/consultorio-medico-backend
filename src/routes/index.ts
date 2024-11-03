@@ -1,7 +1,7 @@
 import { Router } from "express";
 import personRouter from "./person.routes";
 import visitsRouter from "./visits.routes";
-import emergencyContactRouter from "./emergencyContact.routes";
+import emergencyContactRouter from "./emergency-contact.routes";
 import insuranceRouter from "./insurance.routes";
 import usersRouter from "./users.routes";
 import accountsRouter from "./accounts.routes";
