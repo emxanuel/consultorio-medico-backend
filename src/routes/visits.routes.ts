@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getVisitsPerPatient, getAllVisits, getVisit, answerVisit } from "../controllers";
-import { checkUserMiddleware } from "../middlewares/check-user";
+import { checkUserMiddleware } from "../middlewares/check-user.middleware";
 
 const visitsRouter = Router();
 

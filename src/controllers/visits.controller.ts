@@ -6,6 +6,7 @@ import {
   answerToVisit,
 } from "../services/database/visit";
 import dayjs from "dayjs";
+import { activateAccount, deactivateAccount } from "../services/database/accounts";
 
 export const getAllVisits = async (req: Request, res: Response) => {
   const { dateRange, processed, pendient, canceled, name, accountKey } = req.query;
@@ -89,6 +90,26 @@ export const answerVisit = async (req: Request, res: Response) => {
     }
     const updatedVisit = await answerToVisit(Number(id), diagnosis, statusToSave);
     res.json(updatedVisit);
+  } catch (error) {
+    res.json(error);
+  }
+}
+
+export const activateAccountController = async (req: Request, res: Response) => {
+  const { key } = req.params;
+  try {
+    const account = await activateAccount(key);
+    res.json(account);
+  } catch (error) {
+    res.json(error);
+  }
+}
+
+export const deactivateAccountController = async (req: Request, res: Response) => {
+  const { key } = req.params;
+  try {
+    const account = await deactivateAccount(key);
+    res.json(account);
   } catch (error) {
     res.json(error);
   }

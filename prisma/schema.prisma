@@ -75,14 +75,16 @@ model account_client {
 }
 
 model accounts {
-  id             Int              @id @default(autoincrement())
-  name           String?          @db.VarChar(255)
-  created_at     String?          @db.VarChar(40)
-  admin_id       Int?
-  account_key    String           @unique(map: "account_key_UNIQUE") @default(uuid()) @db.VarChar(50)
-  account_admin  account_admin[]
-  account_client account_client[]
-  users          users?           @relation(fields: [admin_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "accounts_ibfk_1")
+  id                     Int                      @id @default(autoincrement())
+  name                   String?                  @db.VarChar(255)
+  created_at             String?                  @db.VarChar(40)
+  admin_id               Int?
+  account_key            String                   @unique(map: "account_key_UNIQUE") @default(uuid()) @db.VarChar(50)
+  account_admin          account_admin[]
+  account_client         account_client[]
+  users                  users?                   @relation(fields: [admin_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "accounts_ibfk_1")
+  active                 Boolean                  @default(false)
+  accounts_subscriptions accounts_subscriptions[]
 
   @@index([admin_id], map: "accounts_ibfk_1_idx")
 }
@@ -118,6 +120,26 @@ model users {
   created_at    String?         @db.VarChar(40)
   account_admin account_admin[]
   accounts      accounts[]
+}
+
+model subscriptions {
+  id                       Int                      @id @default(autoincrement())
+  external_subscription_id String                   @unique @db.VarChar(255)
+  provider                 String                   @db.VarChar(255)
+  price                    Float
+  created_at               String?                  @db.VarChar(40)
+  accounts_subscriptions   accounts_subscriptions[]
+}
+
+model accounts_subscriptions {
+  id              Int           @id @default(autoincrement())
+  account_id      Int
+  subscription_id Int
+  accounts        accounts      @relation(fields: [account_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "accounts_subscriptions_ibfk_1")
+  subscriptions   subscriptions @relation(fields: [subscription_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "accounts_subscriptions_ibfk_2")
+
+  @@index([account_id], map: "accounts_subscriptions_ibfk_1")
+  @@index([subscription_id], map: "accounts_subscriptions_ibfk_2")
 }
 
 enum clients_gender {

@@ -5,6 +5,7 @@ import emergencyContactRouter from "./emergency-contact.routes";
 import insuranceRouter from "./insurance.routes";
 import usersRouter from "./users.routes";
 import accountsRouter from "./accounts.routes";
+import subscriptionsRouter from "./subscriptions.routes";
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use("/emergencyContact", emergencyContactRouter)
 router.use("/insurance", insuranceRouter)
 router.use("/users", usersRouter)
 router.use("/accounts", accountsRouter)
+router.use("/subscriptions", subscriptionsRouter)
 
 export default router;
