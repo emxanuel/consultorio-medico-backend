@@ -1,7 +1,7 @@
 import cors from 'cors'
 
 const whiteList: string[] = [
-
+  'https://consultorio-medico-git-dev-emxanuels-projects.vercel.app'
 ]
 
 export const corsMiddleware = cors({
