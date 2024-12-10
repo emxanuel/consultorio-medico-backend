@@ -6,7 +6,7 @@ const visitsRouter = Router();
 
 visitsRouter.get("/", getAllVisits);
 visitsRouter.get("/:id", getVisit);
-visitsRouter.get("/patient/:id", getVisitsPerPatient);
+visitsRouter.get("/patient/:document", getVisitsPerPatient);
 visitsRouter.put("/:id/answer", answerVisit);
 
 

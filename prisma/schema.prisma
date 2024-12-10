@@ -101,7 +101,7 @@ model clients {
   nationality       String?                 @db.VarChar(100)
   religion          String?                 @db.VarChar(100)
   occupation        String?                 @db.VarChar(100)
-  document_id       String                  @db.VarChar(50)
+  document_id       String                  @unique(map: "client_document_id_UNIQUE") @db.VarChar(50)
   address           String?                 @db.VarChar(255)
   residential_phone String?                 @db.VarChar(20)
   cellphone         String                  @db.VarChar(20)

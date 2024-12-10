@@ -46,9 +46,17 @@ export const getVisitById = async (id: number, accountKey?: string) => {
   });
 }
 
-export const getVisitsByPatientId = async (id: number) => {
+export const getVisitsByPatient = async (document: string) => {
+  const patient = await prisma.clients.findFirst({
+    where: {
+      document_id: document
+    }
+  })
+
+  if (!patient) return [];
+
   return await prisma.visits.findMany({
-    where: { patient_id: id },
+    where: { patient_id: patient.id },
     include: {
       person: true,
     },

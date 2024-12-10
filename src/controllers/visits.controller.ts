@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import {
   getVisits,
-  getVisitsByPatientId,
+  getVisitsByPatient,
   getVisitById,
   answerToVisit,
 } from "../services/database/visit";
@@ -49,7 +49,11 @@ export const getAllVisits = async (req: Request, res: Response) => {
   }
 
   if (name){
-    visits = visits.filter((visit) => visit.person.first_name.toLowerCase().includes(name.toString().toLowerCase()));
+    if (isNaN(Number(name))) {
+      visits = visits.filter((visit) => visit.person.first_name.toLowerCase().includes(name.toString().toLowerCase()));
+    } else {
+      visits = visits.filter((visit) => visit.person.document_id.includes(name.toString()));
+    }    
   }
 
   try {
@@ -70,9 +74,9 @@ export const getVisit = async (req: Request, res: Response) => {
 };
 
 export const getVisitsPerPatient = async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { document } = req.params;
   try {
-    const visits = await getVisitsByPatientId(Number(id));
+    const visits = await getVisitsByPatient(document);
     res.json(visits);
   } catch (error) {
     res.json(error);
