@@ -1,4 +1,5 @@
 import prisma from "../../../prisma";
+import { IUpdateUserPayload } from "../../../types/users";
 
 export const getUserById = async (id: number)  => {
     return await prisma.users.findUnique({
@@ -50,4 +51,19 @@ export const createUser = async (email: string, firstName: string, lastName: str
     catch(error){
         throw error
     }
+}
+
+export const updateUser = async (body: IUpdateUserPayload, email: string) => {
+    const user = await prisma.users.findFirst({
+        where: { email },
+    });
+
+    if(!user){
+        throw new Error('User not found');
+    }
+
+    return await prisma.users.update({
+        data: body,
+        where: { email },
+    });
 }

@@ -1,5 +1,6 @@
-import { createUser, verifyUser } from '../services/database/users'
+import { createUser, updateUser, verifyUser } from '../services/database/users'
 import { Request, Response } from 'express'
+import jwt from 'jsonwebtoken'
 
 export const addUser = async (req: Request, res: Response) => {
     const { email, firstName, lastName, isAdmin, accountName } = req.body
@@ -25,6 +26,34 @@ export const verifyAccountInUser = async (req: Request, res: Response) => {
         const user = await verifyUser(email as string)
         res.json(user !== null)
     } catch (error) {
-        res.json({})
+        res.json({error})
+    }
+}
+
+export const updateUserController = async (req: Request, res: Response) => {
+    const { email } = req.params
+    const { body } = req
+
+    try {
+        if (!email) {
+            throw new Error('Missing required fields')
+        }
+        const user = await updateUser(body, email)
+        res.json(user)
+    } catch (error) {
+        res.status(400).json({error})
+    }
+}
+
+export const getUserController = async (req: Request, res: Response) => {
+    const { email } = req.params
+    try {
+        if (!email) {
+            throw new Error('Missing required fields')
+        }
+        const user = await verifyUser(email as string)
+        res.json(user)
+    } catch (error) {
+        res.status(400).json({error})
     }
 }

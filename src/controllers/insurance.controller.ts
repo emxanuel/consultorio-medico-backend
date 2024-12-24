@@ -8,6 +8,6 @@ export const getInsurancePerPerson = async (req: Request, res: Response) => {
         res.json(insurance);
     }
     catch(error){
-        res.json(error);
+        res.json({error});
     }
 }

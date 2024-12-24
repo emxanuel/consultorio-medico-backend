@@ -8,6 +8,6 @@ export const getEmergencyContactPerPerson = async (req: Request, res: Response) 
         res.json(emergencyContacts);
     }
     catch(error){
-        res.json(error);
+        res.json({error});
     }
 }

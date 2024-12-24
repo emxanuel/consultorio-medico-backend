@@ -1,5 +1,5 @@
-import { EmergencyContact } from "./EmergencyContact";
-import { Insurance } from "./Insurance";
+import { EmergencyContact } from "./emergency-contact";
+import { Insurance } from "./insurance";
 
 export type Gender = 'male' | 'female';
 
