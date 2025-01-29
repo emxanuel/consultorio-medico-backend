@@ -26,7 +26,15 @@ This is the backend service for the Emergency Room application. It provides APIs
 
 1. Start the development server:
   ```sh
-  npm start
+  npm run dev
+
+  or
+
+  pnpm dev
+
+  or
+
+  yarn dev
   ```
 2. The server will be running at `http://localhost:{PORT || 80}`.
 
