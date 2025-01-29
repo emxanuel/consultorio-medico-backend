@@ -1,5 +1,3 @@
-import { Person } from "./person";
-
 export type Insurance = {
     id: number;
     person_id: number;

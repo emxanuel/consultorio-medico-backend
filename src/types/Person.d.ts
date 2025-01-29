@@ -1,6 +1,3 @@
-import { EmergencyContact } from "./emergency-contact";
-import { Insurance } from "./insurance";
-
 export type Gender = 'male' | 'female';
 
 export type MaritalStatus = 'single' | 'married' | 'divorced' | 'widowed' | 'minor';

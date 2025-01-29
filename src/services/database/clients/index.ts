@@ -1,6 +1,5 @@
 import prisma from "../../../prisma";
 import { Insurance, Person, EmergencyContact, Visit } from "../../../types";
-import { getAccountByKey } from "../accounts";
 
 export const getPersonById = async (id: number) => {
   return await prisma.clients.findUnique({
@@ -53,3 +52,25 @@ export const createPerson = async (
     },
   });
 };
+
+export const getPatientsCount = async (accountKey: string) => {
+  const account = await prisma.accounts.findFirst({
+    where: {
+      account_key: accountKey,
+    },
+  });
+
+  if (!account) {
+    throw new Error("Account not found");
+  }
+
+  return await prisma.clients.count({
+    where: {
+      account_client: {
+        some: {
+          account_id: account.id,
+        },
+      },
+    },
+  });
+}

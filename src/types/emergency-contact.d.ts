@@ -1,5 +1,3 @@
-import { Person } from "./person";
-
 export type EmergencyContact = {
     id: number;
     person_id: number;

@@ -1,6 +1,5 @@
 import { createUser, updateUser, verifyUser } from '../services/database/users'
 import { Request, Response } from 'express'
-import jwt from 'jsonwebtoken'
 
 export const addUser = async (req: Request, res: Response) => {
     const { email, firstName, lastName, isAdmin, accountName } = req.body

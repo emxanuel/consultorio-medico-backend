@@ -1,19 +1,18 @@
 import e from "express";
 import dotenv from "dotenv";
 import router from "./routes";
-import cors from "cors";
-import { checkUserMiddleware } from "./middlewares/check-user.middleware";
-import { excludeRoutes } from "./middlewares/exclude-routes.middleware";
+// import { checkUserMiddleware } from "./middlewares/check-user.middleware";
+// import { excludeRoutes } from "./middlewares/exclude-routes.middleware";
 import { corsMiddleware } from "./middlewares/cors.middleware";
 import morgan from 'morgan'
 
 const app = e();
+app.use(morgan('common'))
 dotenv.config();
 app.use(e.urlencoded({ extended: true }));
 app.use(e.json());
 app.use(corsMiddleware);
-app.use(excludeRoutes(checkUserMiddleware, ["/api/v1/patients", "/api/v1/users"]));
-app.use(morgan('common'))
+// app.use(excludeRoutes(checkUserMiddleware, ["/api/v1/patients", "/api/v1/users"]));
 
 app.use("/api/v1", router);
 

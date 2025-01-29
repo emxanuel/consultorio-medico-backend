@@ -14,43 +14,38 @@ export const verifyUser = async (email: string) => {
 }
 
 export const createUser = async (email: string, firstName: string, lastName: string, accountName: string, isAdmin: boolean) => {
-    try{
-        const user = await prisma.users.create({
-            data: {
-                first_name: firstName,
-                last_name: lastName,
-                email,
-                created_at: new Date().toISOString(),
-                account_admin: {
-                    create: {
-                        accounts: {
-                            create: {
-                                name: accountName,
-                                created_at: new Date().toISOString(),
-    
-                            },
+    const user = await prisma.users.create({
+        data: {
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            created_at: new Date().toISOString(),
+            account_admin: {
+                create: {
+                    accounts: {
+                        create: {
+                            name: accountName,
+                            created_at: new Date().toISOString(),
+
                         },
-                        account_owner: isAdmin? 1 : 0,
                     },
-                }
-            },
-            include: {
-                account_admin: true
+                    account_owner: isAdmin? 1 : 0,
+                },
             }
-        });
-    
-        await prisma.accounts.update({
-            data: {
-                admin_id: user.id
-            },
-            where: {
-                id: user.account_admin[0].account_id ?? undefined
-            }
-        })
-    }
-    catch(error){
-        throw error
-    }
+        },
+        include: {
+            account_admin: true
+        }
+    });
+
+    await prisma.accounts.update({
+        data: {
+            admin_id: user.id
+        },
+        where: {
+            id: user.account_admin[0].account_id ?? undefined
+        }
+    })
 }
 
 export const updateUser = async (body: IUpdateUserPayload, email: string) => {

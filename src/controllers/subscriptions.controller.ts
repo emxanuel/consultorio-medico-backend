@@ -13,7 +13,7 @@ export async function createSubscriptionController (req: Request, res: Response)
       message: 'Subscription created',
     })
   }
-  catch (error: any) {
-    res.status(400).send({ message: error.message })
+  catch (error) {
+    res.status(400).send(error)
   }
 }

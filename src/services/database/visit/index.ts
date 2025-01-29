@@ -1,7 +1,6 @@
 import prisma from "../../../prisma";
 
 export const getVisits = async (accountKey: string) => {
-
   try {
     if (!accountKey) return [];
 
@@ -20,10 +19,10 @@ export const getVisits = async (accountKey: string) => {
       include: {
         person: {
           include: {
-            account_client: true
+            account_client: true,
           },
         },
-      }
+      },
     });
 
     const result = visits.filter((visit) => {
@@ -35,23 +34,23 @@ export const getVisits = async (accountKey: string) => {
     console.error("Error fetching visits:", error);
     throw error;
   }
-}
+};
 
-export const getVisitById = async (id: number, accountKey?: string) => {
+export const getVisitById = async (id: number) => {
   return await prisma.visits.findUnique({
     where: { id },
     include: {
       person: true,
     },
   });
-}
+};
 
 export const getVisitsByPatient = async (document: string) => {
   const patient = await prisma.clients.findFirst({
     where: {
-      document_id: document
-    }
-  })
+      document_id: document,
+    },
+  });
 
   if (!patient) return [];
 
@@ -63,7 +62,11 @@ export const getVisitsByPatient = async (document: string) => {
   });
 };
 
-export const answerToVisit = async (id: number, diagnosis: string, status: number) => {
+export const answerToVisit = async (
+  id: number,
+  diagnosis: string,
+  status: number
+) => {
   return await prisma.visits.update({
     where: { id },
     data: {
@@ -71,4 +74,40 @@ export const answerToVisit = async (id: number, diagnosis: string, status: numbe
       status,
     },
   });
-}
+};
+
+export const getTodayVisitsCount = async (accountKey: string) => {
+  const account = await prisma.accounts.findFirst({
+    where: {
+      account_key: accountKey,
+    },
+  });
+
+  if (!account) return [];
+
+  const today = new Date().toISOString();
+
+  return await prisma.$queryRaw`
+    SELECT COUNT(*) FROM visits
+    WHERE account_id = ${account.id}
+    AND DATE(visit_date) = DATE(${today})
+  `;
+};
+
+// export const getRecentActivity = async (accountKey: string) => {
+//   const account = await prisma.accounts.findFirst({
+//     where: {
+//       account_key: accountKey,
+//     },
+//   });
+// 
+//   if (!account) return [];
+// 
+//   return await prisma.visits.findMany({
+//     ,
+//     take: 5,
+//     orderBy: {
+//       visit_date: "desc",
+//     },
+//   });
+// }

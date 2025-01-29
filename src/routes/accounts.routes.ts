@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import { getAccount, getAccountsByUser } from "../controllers/accounts.controller";
 import { activateAccountController, deactivateAccountController } from "../controllers";
 
