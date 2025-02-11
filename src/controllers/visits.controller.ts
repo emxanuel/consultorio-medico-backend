@@ -76,8 +76,8 @@ export const getVisit = async (req: Request, res: Response) => {
 export const getVisitsPerPatient = async (req: Request, res: Response) => {
   const { document } = req.params;
   try {
-    const visits = await getVisitsByPatient(document);
-    res.json(visits);
+    const result = await getVisitsByPatient(document);
+    res.json(result);
   } catch (error) {
     res.json(error);
   }

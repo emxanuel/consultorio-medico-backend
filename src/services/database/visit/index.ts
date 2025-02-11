@@ -52,14 +52,22 @@ export const getVisitsByPatient = async (document: string) => {
     },
   });
 
-  if (!patient) return [];
+  if (!patient) return {
+    patient: null,
+    visits: [],
+  };
 
-  return await prisma.visits.findMany({
+  const visits = await prisma.visits.findMany({
     where: { patient_id: patient.id },
     include: {
       person: true,
     },
   });
+
+  return {
+    patient,
+    visits,
+  }
 };
 
 export const answerToVisit = async (
